@@ -2,7 +2,7 @@
 
 It provides a gherkin framework and a collection of utility functions to make API testing easy and less time consuming.
 
-[Cucumber.js](https://github.com/cucumber/cucumber-js) is JavaScript & Node.js implementation of Behaviour Driven Development test framework - [Cucumber](http://cukes.info/). Cucumber.js is using [Gherkin](http://cukes.info/gherkin.html) language for describing the test scenarios in [BDD](http://en.wikipedia.org/wiki/Behavior-driven_development) manner.
+[Cucumber.js](https://github.com/cucumber/cucumber-js) is JavaScript & Node.js implementation of Behaviour Driven Development test framework - [Cucumber](https://github.com/cucumber). Cucumber.js is using [Gherkin](https://cucumber.io/docs/gherkin/reference/) language for describing the test scenarios in [BDD](http://en.wikipedia.org/wiki/Behavior-driven_development) manner.
 
 ## How to start - a simple tutorial
 
