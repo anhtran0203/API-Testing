@@ -1,0 +1,62 @@
+name: Automation Test Workflow - Cucumber JS
+on:
+  workflow_dispatch:
+    name: on-demand
+    inputs:
+      TAG:
+        required: true
+        description: 'tag name'
+        default: 'regression_qa'
+
+jobs:
+  test-summary:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Tests Running Information
+        run: |
+          echo "### Tests Running Summary :zap:" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Actor:** ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Branch:** ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **BDD tags:** \"@${{ github.event.inputs.TAG }}\"" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+  regression-test:
+    needs: test-summary
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "20.13"
+
+      - name: Create .env file
+        run: |
+          cd src
+          mkdir configs
+          cd configs
+          touch .env
+          echo "BASE_URL=${{ secrets.BASE_URL }}" >> .env
+          # echo "ADMIN_USERNAME=${{ secrets.ADMIN_USERNAME }}" >> .env
+          # echo "ADMIN_PASSWORD=${{ secrets.ADMIN_PASSWORD }}" >> .env
+          # echo "ADMIN_USERNAME2=${{ secrets.ADMIN_USERNAME2 }}" >> .env
+          # echo "ADMIN_PASSWORD2=${{ secrets.ADMIN_PASSWORD2 }}" >> .env
+
+      - name: Install npm packages
+        run: |
+          npm install
+
+      - name: Run Automation Test
+        run: |
+          bash runFeature.sh "@${{ github.event.inputs.TAG }}"
+
+      - name: Upload report artifact
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: test-guild-api-js-report
+          path: test/report/**/*
+          retention-days: 3
